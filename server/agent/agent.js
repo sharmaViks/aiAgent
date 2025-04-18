@@ -23,36 +23,36 @@ const model = new ChatAnthropic({
 
 const memorySaver = new MemorySaver();
 
-const agent = createReactAgent({
+export const agent = createReactAgent({
     llm: model,
     tools: [weatherTool],
     checkpointSaver: memorySaver 
 })
 
-const result = await agent.invoke({
-    messages: [
-        {
-            role: "user",
-            content: "What's the weather in Delhi?"
-        }
-    ]
-},
-{
-    configurable:{ thread_id: 42 }
-})
+// const result = await agent.invoke({
+//     messages: [
+//         {
+//             role: "user",
+//             content: "What's the weather in Delhi?"
+//         }
+//     ]
+// },
+// {
+//     configurable:{ thread_id: 42 }
+// })
 
-console.log(result.messages.at(-1)?.content);
+// console.log(result.messages.at(-1)?.content);
 
-const followup = await agent.invoke({
-    messages: [
-        {
-            role: "user",
-            content: "What was the city of the user?"
-        }
-    ]
-},
-{
-    configurable:{ thread_id: 42 }
-})
+// const followup = await agent.invoke({
+//     messages: [
+//         {
+//             role: "user",
+//             content: "What was the city of the user?"
+//         }
+//     ]
+// },
+// {
+//     configurable:{ thread_id: 42 }
+// })
 
-console.log(followup.messages.at(-1)?.content);
+// console.log(followup.messages.at(-1)?.content);
