@@ -16,32 +16,15 @@ const weatherTool = tool(async ({ query }) => {
         }),
     });
 
-async function evalAndCaptureOutput(code) {
-    const oldLog = console.log;
-    const oldError = console.error;
-
-    const output = [];
-    let errorOutput = [];
-
-    console.log = (...args) => output.push(args.join(' '));
-    console.error = (...args) => errorOutput.push(args.join(' '));
-
-    try {
-        await eval(code);
-    } catch (error) {
-        errorOutput.push(error.message);
-    }
-
-    console.log = oldLog;
-    console.error = oldError;
-
-    return { stdout: output.join('\n'), stderr: errorOutput.join('\n') };
-}
-
-
 const jsExecutorTool = tool(async ({ code }) => {
-    const result = await evalAndCaptureOutput(code);
-    return result;
+    const response = await fetch(process.env.EXECUTOR_URL || '', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ code })
+    });
+    return await response.json();
 },
     {
         name: 'run_javascript_code_tool',
